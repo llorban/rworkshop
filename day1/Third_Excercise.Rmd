@@ -1,0 +1,116 @@
+---
+title: "Third_excercises"
+author: "Joe Thompson"
+date: '2018-07-25'
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Specifying function inputs
+
+You may have already noticed that a single line of code can become awkard or hard to read. For example,
+
+```{r}
+summary(rnorm(10,0,1))
+```
+
+This code randomly samples ten data points from the standard normal distribution, and then provides summary statistics for the sample. One method for making this code more readable is to use the named arguments available within rnorm. For example, 
+
+```{r }
+summary(rnorm(n=10,mean=0,sd=1))
+```
+
+Using these arguments can make code much more readible, and mistakes less common. These names are specified by the rnorm package, as can be seen if you use the help command.
+
+```{r,  echo=FALSE}
+?rnorm
+```
+
+You may have noticed, however, that some functions do not take numbers as inputs. For example, consider the sample function. 
+
+```{r }
+?sample
+```
+
+Sample chooses n items from the vector x, but has a parameter called 'replace', which will result in sampling with replacement when replace=TRUE e.g.,
+
+
+```{r}
+sample(5,5,replace=FALSE)
+sample(5,5,replace=TRUE)
+```
+
+Notice that TRUE is not a number, but a logical.
+
+```{r }
+class(TRUE)
+```
+
+In other words, some functions may use numbers as inputs and others may use other data types, such as logicals. Some functions require factors or categorical variable inputs, or even formula. We will talk about those other data types throughout the workshop. Here we will focus on strings, which are required by many functions, including plot.
+
+```{r}
+plot(x=seq(1,10), y=seq(1,10), main='My scatter plot title', xlab='This is a string!', ylab='and this is a string too!')
+```
+
+The plot function, not surprisingly, calls for a string of characters when one is specifying a title or an axis label. In order for R to know that you are specifying string data, you need to enclose your strings in quotation marks. This means that
+
+```{r, eval=FALSE}
+hist(x=rnorm(n=10,mean=0, sd=1), main=Title)
+```
+
+will result in an error if R cannot find a variable in the workspace called 'Title'. If enclosed in quotation marks, however, R will interpret 'Title' as a string.
+
+```{r}
+hist(x=rnorm(n=10,mean=0, sd=1), main='Title')
+```
+
+## More advanced use of strings
+
+It is possible to create an array of strings. Compare, for example, examine this string, and then close the view window.
+
+```{r }
+MyString='study study study'
+View(MyString)
+```
+ 
+Compare this string of three word to this array of three strings.
+ 
+```{r}
+MyString=c('study','study','study')
+View(MyString)
+```
+
+Sometimes it is also useful to create a string from a variety of data types. For example, if one wants to enclose a mean in a histogram title, they can do so using the paste function.
+
+```{r }
+Data=rnorm(100,0,1)
+Title=paste('My sample of the standard normal, sample mean =', round(mean(Data), digits=2))
+Title
+```
+
+Paste can also be used to create long strings out of many substrings. e.g., 
+
+```{r }
+paste('The', 'dog', 'went', 'to', 'the', 'market')
+```
+
+Thanks to the paste function, the variable 'Title' will be a string that can be used as input to a histogram.
+
+```{r }
+hist(Data,main=Title)
+```
+
+
+## Exercises
+
+1) Use named arguments to randomly sample data from any distribution you like.
+2) Create a plot with a user-specified title.
+3) I sometimes like to teach students about the gambler's fallacy by having them play rock-paper-scissors against a computer program which randomly samples one of three strings: 'rock', 'paper', or 'scissors'. Students who initially try to predict the computers next move based on its previous move are succumbing to the Gambler's fallacy. Use the sample function and your knowledge of strings to create this program.
+4) Try creating a vector of Forty strings. The first twenty should say ‘Control Condition’ and the second twenty should say ‘Experimental Condition’
+5) [hard] Joe likes having the sample mean in the title of his histogram, but he wants it to simply be enclosed in parantheses. e.g., 'My sample of the standard normal (0.01).' How can Joe do this using the paste command and without specifying '0.1' manually. Hint: By default, the paste function will put spaces between the strings you input to the function. To complete this exercise you will need to look at ?paste for details about how to change this default separation. 
+
