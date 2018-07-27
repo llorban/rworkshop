@@ -1,0 +1,78 @@
+---
+title: "Data Frames and Clean Data Files"
+author: "Levente Orban"
+date: '2018-07-26'
+output: pdf_document
+---
+
+## Data Frames
+Until now, we loaded data into vectors using the `r c()` function. However, this is quite limited. Most of our data will have several variables or factors that we need to load into a single data set for statistical analysis. This is where data frames enter. 
+
+A data frame is used for storing tables of values. For example, we created a bunch of vectors yesterday, which we can combine now into a single data frame: 
+
+```{r}
+employmentStatus = c(TRUE,FALSE,FALSE,TRUE,TRUE,TRUE,FALSE)
+siblings = c(1,3,3,1,2,2,1)
+mydata = data.frame(employment = employmentStatus, sibs = siblings)
+mydata
+```
+
+## Importing Data
+However, this data was hand-coded into R, which is a very time consuming process, especially if you have hundreds, thousands, or worse, hundreds of thousands of records. R can handle importing data from a variety of formats including the friendly csv (**c**omma **s**eparated **v**alues) format, or less ideal Excel or SPSS formats. 
+
+Data can come from a variety of sources. One increasingly more common source is the Internet. To import data directly from the web:
+
+```{r}
+myData = read.csv(url("http://llorban.com/psyc2300/1100_exam_grades.csv"))
+```
+
+If we wanted to take a look at this data, we could simply type the name of the variable and hit enter: 
+
+```{r}
+myData
+```
+
+However, this is produces a long fairly useless output. If we are just interested in a quick overview with the variables and types of values they take, we can run the *head()* function: 
+
+```{r}
+head(myData)
+```
+
+Much better. We can tell that three variables, one of which takes on an integer, and the other two taking on float values. 
+
+In some cases, the data will reside on your computer. In this case, we need to set the path to the file on the computer. This will get tricky now, because each of our computers could have different paths. In the case of my computer, I can load a data set I just downloaded like so: 
+
+```{r}
+dataFromFile = read.csv("~/Downloads/levente_weight.csv")
+head(dataFromFile)
+
+```
+
+If you have a directory that you would like to use, and don't want to type in the whole path each time, R can help. getwd() will tell you where R will look by default. 
+
+```{r}
+getwd()
+```
+
+So if I were to type in just the file name, *r read.csv("levente_weight.csv")* without the path, R would assume *read.csv("/Users/llorban/levente_weight.csv") *. In my particular case, because the file is in the Downloads folder, typing in just the file name would result in an error. Go ahead, try it. 
+
+It is possible to change the directory R searches by default with the *r setwd()* command.
+
+```{r}
+setwd("/Users/llorban/Downloads")
+```
+
+Once this command is executed, I can simply use the *read.csv()* with just the file name. 
+
+Importing Excel or SPSS files is also possible with addons. 
+
+# ```{r}
+# library(xlsx)
+# myData = read.xlsx("Grossman and Kross 2014 Study 2.xlsx")
+# head(myData)
+# ```
+
+
+# ```{r}
+# library(Hmisc)
+# ```
