@@ -1,0 +1,39 @@
+---
+title: "2-4 custom functions"
+author: "Levente Orban"
+date: '2018-07-27'
+output: pdf_document
+---
+
+R comes with lots of great built-in functions like `r, eval=F, echo=T mean() `, `r, eval=F, echo=T sd() `, or `r, eval=F, echo=T median() `, but you may find the need for computations that do not have built-in functions. The good news is that you can create your own custom function that behaves and acts just like a built-in R function. 
+
+To start one, you need the following structure: 
+
+```{r}
+myFunction = function(someLocalVariable) {
+  
+  ## your stuff can go here
+  
+}
+```
+
+
+Later, you can call your function later in your code the following ways: 
+
+```{r, eval=F, echo=T}
+
+myFunction(data)
+
+```
+
+or
+
+```{r, eval=F, echo=T}
+
+apply(data, 2, myFunction)
+
+```
+
+# Exercises
+1. Implement your own version of the mean function. Make sure its name is distinct from the built-in function's name
+2. Implement a S.E.M. function

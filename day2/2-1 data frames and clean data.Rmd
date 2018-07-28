@@ -1,20 +1,29 @@
 ---
 title: "Data Frames and Clean Data Files"
-author: "Levente Orban"
+author: "Levente Orbán"
 date: '2018-07-26'
 output: pdf_document
 ---
 
 ## Data Frames
-Until now, we loaded data into vectors using the `r c()` function. However, this is quite limited. Most of our data will have several variables or factors that we need to load into a single data set for statistical analysis. This is where data frames enter. 
+Until now, we loaded data into vectors using the `r, eval=F, echo=T c()` function. However, this is quite limited. Most of our data will have several variables or factors that we need to load into a single data set for analysis. Welcome data frames. 
 
-A data frame is used for storing tables of values. For example, we created a bunch of vectors yesterday, which we can combine now into a single data frame: 
+A data frame is used for storing tables of values. For example, consider the following vectors below. Now we can combine them into a single data frame: 
 
 ```{r}
-employmentStatus = c(TRUE,FALSE,FALSE,TRUE,TRUE,TRUE,FALSE)
-siblings = c(1,3,3,1,2,2,1)
-mydata = data.frame(employment = employmentStatus, sibs = siblings)
+employmentStatus <- c(TRUE,FALSE,FALSE,TRUE,TRUE,TRUE,FALSE)
+siblings <- c(1,3,3,1,2,2,1)
+mydata <- data.frame(employment = employmentStatus, sibs = siblings)
 mydata
+```
+
+Another similar function is `r, eval=F, echo=T list()`. However, unlike `r, echo=T, eval=F data.frame()` in which each column of data must have the same length (i.e., sample size), `r, eval=F, echo=T list()` is more flexible in allowing you to have different variables, each with different lengths. For example: 
+
+```{r}
+employmentStatus <- c(TRUE,FALSE,FALSE,TRUE,TRUE,TRUE,FALSE)
+siblings <- c(1,3,3,1,2,2,1,1,3,3,1,2,2,1)
+mydata <- list(sibs = siblings, emp = employmentStatus)
+head(mydata)
 ```
 
 ## Importing Data
@@ -23,7 +32,7 @@ However, this data was hand-coded into R, which is a very time consuming process
 Data can come from a variety of sources. One increasingly more common source is the Internet. To import data directly from the web:
 
 ```{r}
-myData = read.csv(url("http://llorban.com/psyc2300/1100_exam_grades.csv"))
+myData <- read.csv(url("http://llorban.com/psyc2300/1100_exam_grades.csv"))
 ```
 
 If we wanted to take a look at this data, we could simply type the name of the variable and hit enter: 
@@ -32,20 +41,44 @@ If we wanted to take a look at this data, we could simply type the name of the v
 myData
 ```
 
-However, this is produces a long fairly useless output. If we are just interested in a quick overview with the variables and types of values they take, we can run the *head()* function: 
+As you can see, this produces a long and fairly useless output. If we are just interested in a quick overview with the variables and types of values they take, we can run the *head()* function: 
 
 ```{r}
 head(myData)
 ```
 
-Much better. We can tell that three variables, one of which takes on an integer, and the other two taking on float values. 
+Much better. `r, eval=F, echo=T head()` reveals three variables inside the data frame, one of which takes an integer, and the other two taking on float values. 
+
+Sometimes we are simply interested in just the names of the variables:
+```{r}
+names(myData)
+```
+
+Or a little summary:
+```{r}
+summary(myData)
+```
 
 In some cases, the data will reside on your computer. In this case, we need to set the path to the file on the computer. This will get tricky now, because each of our computers could have different paths. In the case of my computer, I can load a data set I just downloaded like so: 
 
 ```{r}
-dataFromFile = read.csv("~/Downloads/levente_weight.csv")
+dataFromFile <- read.csv("~/Downloads/levente_weight.csv")
 head(dataFromFile)
 
+```
+
+Let's dig into this data. We need to revisit the idea of subsetting from yesterday, and the idea of referring to column names. If we wanted to better understand Lev's weight trends over the years, we would need to be able to tease out data according to the date. 
+
+We can restrict our analysis to just one of the variables:
+
+```{r}
+head(dataFromFile$Weight)
+```
+
+We can even calculate the mean just for the weight:
+
+```{r}
+mean(dataFromFile$Weight)
 ```
 
 If you have a directory that you would like to use, and don't want to type in the whole path each time, R can help. getwd() will tell you where R will look by default. 
@@ -54,25 +87,76 @@ If you have a directory that you would like to use, and don't want to type in th
 getwd()
 ```
 
-So if I were to type in just the file name, *r read.csv("levente_weight.csv")* without the path, R would assume *read.csv("/Users/llorban/levente_weight.csv") *. In my particular case, because the file is in the Downloads folder, typing in just the file name would result in an error. Go ahead, try it. 
+So if I were to type in just the file name, `r, eval=F, echo=T read.csv("levente_weight.csv")` without the path, R would assume `r, eval=F, echo=T read.csv("/Users/llorban/levente_weight.csv")`. In my particular case, because the file is in the Downloads folder, typing in just the file name would result in an error. Go ahead, try it. 
 
-It is possible to change the directory R searches by default with the *r setwd()* command.
+It is possible to change the directory R searches by default with the `r, eval=F, echo=T setwd()` command.
 
 ```{r}
 setwd("/Users/llorban/Downloads")
 ```
 
-Once this command is executed, I can simply use the *read.csv()* with just the file name. 
+Once this command is executed, I can simply use the `r, eval=F, echo=T read.csv()` with just the file name. 
 
-Importing Excel or SPSS files is also possible with addons. 
+Importing Excel files is also possible with addons. We will install an additional package: 
 
-# ```{r}
-# library(xlsx)
-# myData = read.xlsx("Grossman and Kross 2014 Study 2.xlsx")
-# head(myData)
-# ```
+```{r, eval=F, echo=T}
+install.packages("readxl")
+```
+
+And import files like so:
+
+```{r}
+library(readxl)
+setwd("~/Downloads")
+myData <- read_xlsx("Grossman and Kross 2014 Study 2.xlsx")
+head(myData)
+```
+
+If there are multiple sheets, you can specify the sheet number: 
+```{r}
+library(readxl)
+setwd("~/Downloads")
+myData <- read_xlsx("Grossman and Kross 2014 Study 2.xlsx", sheet = 1)
+head(myData)
+```
+
+## Indexing
+
+Consider this data: 
+
+```{r}
+label <- c("Experimental", "Experimental", "Experimental", "Experimental", "Experimental", "Experimental", "Control", "Control", "Control", "Control", "Control", "Control", "Control")
+data <- c(12, 13, 14, 13, 12, 14, 15, 16, 14, 15, 16, 14, 13)
+
+dataset <- data.frame(condition = label, values = data)
+dataset[dataset$condition == "Control",]
+```
+
+Subsetting is very powerful that allows you to filter the data in many different ways: 
+```{r}
+dataset[dataset$values < 15,][dataset$label]
+```
 
 
-# ```{r}
-# library(Hmisc)
-# ```
+# Exercise 1
+
+About the data you will work on: A survey randomly selected a group of Hong Kong residents for a telephone questionnaire. The survey was conducted during the H1N1 influenza epidemic. Survey questions polled subjects about their anxiety, risk perception, knowledge on modes of transmission, and preventative behaviours. I have selected and cleaned up a version of this questionnaire that has two columns of data: Column 1: questions asked before the H1N1 pandemic, and questions asked during the pandemic. Column 2: Answer to the following question: What do you think are your chances of getting swine flu (H1N1 influenza A) over the next 1 month compared to others outside your family? 1-Not at all; 2-Much less; 3- Less; 4-Evens; 5-More; 6-Much more; 7-Certain. Note that each row represents a different subject in this data set.
+
+* Original Publication (for your reference): https://academic.oup.com/jid/article/202/6/867/936219
+* Original Data (for your reference): https://datadryad.org/resource/doi:10.5061/dryad.1485f
+
+Download the cleaned up data from our github repository under the **day2** folder. The name of the file is *2-1 fludata_chances.csv*
+
+1. Import the following data set into R. Try running a web import, and an import from your local machine.
+2. Find out the following about this data set: names of all the variables, and the sample size
+3. Check for normality and homogeneity
+4. Compute the mean of each variable
+5. Use subselect for the "before" and "during" group, and compute the mean and standard deviation of each group
+
+# Exercise 2
+
+Import this data either using the web importer or from your local machine: https://stats.idre.ucla.edu/stat/data/hsb2_small.csv. You will find this file in the git repository too, as 2-1 hsb2_small.csv under **day2**.
+
+1. Find out the variable names and the data type for each variable
+2. Select records that have a science score of over 60. 
+3. Compute the mean and standard deviation of "write" and "science" score of those subjects that have a science score of 60 or more 
