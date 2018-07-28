@@ -1,0 +1,88 @@
+---
+title: "Hypothesis Testing, Part 1"
+author: "Nicholas A. Del Grosso"
+date: "July 23, 2018"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, echo=FALSE}
+x <- seq(-6, 12, .01)
+y1 <- dnorm(x, mean=-1, sd=1,)
+y2 <- dnorm(x, mean=4, sd=2)
+xlim <- c(-4, 10)
+ylim <- c(0, .5)
+plot(x, y1, 'l', ylab='', col=rgb(1,0,0,1), main="Two Normal Population Distributions, with Sample Data (N=100)", xlim=xlim, ylim=ylim)
+lines(x, y2, col=rgb(0,0,1,1))
+par(new=TRUE)
+hist(rnorm(100, mean=-1, sd=1), 12, xlim = xlim, col=rgb(1,0,0,0.2), freq=F, ylim=ylim, main='', xlab='')
+par(new=TRUE)
+hist(rnorm(100, mean=4, sd=2), 12, xlim = xlim, col=rgb(0,0,1,0.2), freq=F, ylim=ylim, main='', xlab='')
+```
+
+## Querying and Generating Probability Densities
+
+R's built-in stats package comes with lots of functions for working with common probability distributions.  The functions we will review here allow you to:
+
+  - Get the distribution's **(d)ensity** height, given x values: *dnorm()*, *dpois()*, *dunif()*
+  - Get **(r)andom** amples from the distribution: *rnorm()*, *rpois()*, *runif()*
+  - Get the distributions's quantiles: 
+    - The **(q)uantile** of the distribution, given a percentile: *qnorm()*, *qpois()*, *qunif()*
+    - The **(p)ercentile** of the distribution, given a quantile: *pnorm()*, *ppois()*, *punif()*
+    
+Examples of usage:
+
+```{r}
+x <- seq(-3, 3, .1)
+y <- dnorm(x, mean=0, sd=1)
+plot(x, y)
+
+data <- rnorm(100, mean=0, sd=1)
+hist(data)
+
+qnorm(p=.05, mean=0, sd=1)
+pnorm(q=-1.645, mean=0, sd=1)
+
+```
+
+
+## T-Tests
+
+The **t.test()** function does t-tests.  Setting different options in the function arguments lets you use it as one-sided or two-sided test, a paired-sample or independent-sample test, assume equal variance, etc.  It returns a table of the results:
+
+```{r}
+x <- rnorm(100, mean=-0.5, sd=1)
+y <- rnorm(100, mean=0.5, sd=1)
+t.test(x, y, alternative = "two.sided")
+```
+
+Nonparametric alternatives to the t-test are also available:
+  - Kruskall-Wallis Test: *kruskall.test()*
+  - Mann-Whitney U Test: *wilcox.test()*
+  - Wilcoxon Rank Sum Test: *wilcox.test(paired=TRUE)*
+
+  
+If you save the result of the test as a variable, you can also access the details of the table and index the **names** of the result to access the data:
+
+```{r}
+results = t.test(x, y, alternative = "two.sided")
+names(results)
+
+results['p.value']  # Can also be written as: results$p.value
+```
+
+## Correlations
+
+Testing for correlations between paired samples can be done with the *cor.test()* function.  By default it does a Pearson correlation, but can also do a Spearman or Kendall's Tau test by changing the "method" argument
+
+
+
+## Exercises
+
+Exercises are available at the hypothesis_testing_exercises.R script.
+
+
+
