@@ -10,10 +10,10 @@ R comes with lots of great built-in functions like `r, eval=F, echo=T mean() `, 
 To start one, you need the following structure: 
 
 ```{r}
-myFunction = function(someLocalVariable) {
+myFunction = function(someOptionalVariable) {
   
   ## your stuff can go here
-  
+  ## the output of this function will become the result
 }
 ```
 
@@ -33,6 +33,9 @@ or
 apply(data, 2, myFunction)
 
 ```
+
+
+
 
 # Exercises
 1. Implement your own version of the mean function. Make sure its name is distinct from the built-in function's name
