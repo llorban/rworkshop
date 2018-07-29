@@ -34,7 +34,17 @@ apply(data, 2, myFunction)
 
 ```
 
+Let's look at an example
 
+```{r}
+
+counter = function() {
+  
+  seq(1,5)
+  
+}
+
+```
 
 
 # Exercises
