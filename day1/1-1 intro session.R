@@ -1,4 +1,6 @@
-# After starting R, the console is ready for input. You can enter values next to the prompt (>), and press Enter to perform calculations. 
+this is my new edit
+
+# After starting R, the console is ready fo r input. You can enter values next to the prompt (>), and press Enter to perform calculations. 
 1 + 2
 
 # To square numbers, use the hat (^) sign:
