@@ -1,5 +1,6 @@
 # rworkshop
 
+Thank you for a great experience!  Here are some further learning resources:
 
 Learning statistics using R: https://compcogscisydney.org/learning-statistics-with-r/ (open textbook)
 
