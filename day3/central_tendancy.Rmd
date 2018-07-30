@@ -1,0 +1,38 @@
+---
+title: "Law of Central Tendancy Demo"
+author: "Nicholas A. Del Grosso"
+date: "July 26, 2018"
+output: ioslides_presentation
+runtime: shiny
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Interactive Plot
+
+```{r}
+inputPanel(
+  sliderInput("n.samples", label = "Number of Samples in an Experiment:",
+              min = 10, max = 100, value = 10, step = 1),
+  
+  sliderInput("n.experiments", label = "Number of Experiments:",
+              min = 5, max = 500, value = 15, step = 5),
+  
+  sliderInput("n.bins", label = "Number of Histogram Bins:",
+              min = 3, max = 40, value = 7, step = 1)
+)
+
+
+renderPlot({
+  means <- replicate(input$n.experiments, mean(runif(input$n.samples, min = 0, max = 1)))
+  hist(means, xlim = c(0, 1), freq=F, breaks = input$n.bins)
+  
+  x <- seq(0, 1, 0.01)
+  y <- dnorm(x, mean = mean(means), sd = sqrt(input$n.samples - 1))
+  lines(x, y, col=rgb(0,0, 1))
+})
+```
+
+

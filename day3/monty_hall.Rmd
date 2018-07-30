@@ -1,0 +1,82 @@
+---
+title: "Monty Hall Problem"
+author: "Nicholas A. Del Grosso"
+date: "July 26, 2018"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+The are 3 doors.  There is a goat behind one of the doors.
+
+```{r}
+doors <- sample(c(F, F, T))
+names(doors) <- c("A", "B", "C")
+doors
+```
+
+You choose one of the 3 doors.
+```{r}
+selection <- sample(names(doors), 1)
+cat("Selection: Door", selection)
+```
+
+Monty opens of the non-chosen doors, shows that it's a goat. 
+
+```{r}
+goat_door <- sample(intersect(names(doors[doors == F]), names(doors[names(doors) != selection])), 1)
+cat("Monty Opens Door: ", goat_door, ". It's a goat.", sep = "")
+```
+
+Monty asks if you want to change your mind.
+
+```{r}
+doors2 <- doors[names(doors) != goat_door]
+cat("Remaining Doors:\n")
+doors2
+
+```
+
+You decide. 
+
+```{r}
+change_mind <- T
+final_selection <- doors2[names(doors2) != selection]
+
+cat("Final Selection: Door ", names(final_selection), ". Contains Car: ", final_selection, sep = '')
+```
+
+What were the chances of winning if you changed your mind, versus if you didn't?  Would it make a difference?
+
+```{r}
+monty_hall <- function(change_mind = TRUE){
+  doors <- sample(c(F, F, T))
+  names(doors) <- c("A", "B", "C")
+  selection <- sample(names(doors), 1)
+  goat_door <- sample(intersect(names(doors[doors == F]), names(doors[names(doors) != selection])), 1)
+  
+  doors2 <- doors[names(doors) != goat_door]
+  if (change_mind){
+    final_selection <- doors2[names(doors2) != selection]
+  } else {
+    final_selection <- doors2[names(doors2) == selection]
+  }
+  
+  as.logical(final_selection)
+}
+
+n.experiments <- 2000
+change_mind <- replicate(n.experiments, monty_hall(TRUE))
+keep_mind <- replicate(n.experiments, monty_hall(FALSE))
+
+cat("Changing Your Mind Won ", mean(change_mind) * 100, "% of games.\n",
+    "Not Changing Won ", mean(keep_mind) * 100, "% of games.\n", sep = '')
+```
+
+
+ 
+ 
