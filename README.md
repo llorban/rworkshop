@@ -4,3 +4,5 @@ Learning statistics using R: https://compcogscisydney.org/learning-statistics-wi
 Statistics--The Story of Numbers: https://itunes.apple.com/us/book/id1386332438 (another open textbook for teaching psych stats with R)
 
 Open Stats Lab: https://sites.trinity.edu/osl 
+
+Markdown Syntax Cheatsheet: https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet
